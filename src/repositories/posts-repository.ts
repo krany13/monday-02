@@ -7,19 +7,19 @@ type postType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string
+    blogName: string | null
 }
 
 export const postsRepository = {
-    createPost(id: string, title: string, shortDescription: string, content: string, blogId: string, blogName: string) {
+    createPost(title: string, shortDescription: string, content: string, blogId: string) {
         const newPost =
             {
-                id: id,
+                id: String(posts.length + 1),
                 title: title,
                 shortDescription: shortDescription,
                 content: content,
                 blogId: blogId,
-                blogName: blogName
+                blogName: null
             }
         posts.push(newPost)
         return newPost
@@ -44,13 +44,15 @@ export const postsRepository = {
         let post = posts.find(v => v.id === id)
         if (post) {
             post.title = title,
-                post.shortDescription = shortDescription,
-                post.content = content,
-                post.blogId = blogId
+            post.shortDescription = shortDescription,
+            post.content = content,
+            post.blogId = blogId
             return true;
         } else {
             return false;
         }
-
+    },
+    deleteAllPosts() {
+        posts.splice(0, posts.length)
     }
 }

@@ -1,27 +1,28 @@
-const bloggers: Array<blogType> = [{id: 1 ,name: "Teddy Smith", youtubeUrl: "retwertert.com"}]
+const bloggers: Array<blogType> = [{id: "1" ,name: "Teddy Smith", youtubeUrl: "chain.com"}]
 
 type blogType = {
-    id: number,
+    id: string,
     name: string,
     youtubeUrl: string
 }
 
 export const bloggersRepository = {
-    createBlog(id: number, name: string, youtubeUrl: string) {
+    createBlog(name: string, youtubeUrl: string) {
         const newBlog =
             {
-                id: id,
+                id: String(bloggers.length + 1),
                 name: name,
-                youtubeUrl: youtubeUrl
+                youtubeUrl,
             }
+        console.log(newBlog, 'newBlog')
         bloggers.push(newBlog)
         return newBlog
     },
-    findBlogById(id: number) {
+    findBlogById(id: string) {
         let blogger = bloggers.find(v => v.id === id)
         return blogger
     },
-    deleteBlogById(id: number) {
+    deleteBlogById(id: string) {
         for (let i = 0; i < bloggers.length; i++) {
             if (bloggers[i].id === id) {
                 bloggers.splice(i, 1)
@@ -33,7 +34,7 @@ export const bloggersRepository = {
     seeBlog() {
         return bloggers
     },
-    updateBlog(id: number, name: string, youtubeUrl: string) {
+    updateBlog(id: string, name: string, youtubeUrl: string) {
         let blogger = bloggers.find(v => v.id === id)
         if (blogger) {
             blogger.name = name,
@@ -42,6 +43,8 @@ export const bloggersRepository = {
         } else {
             return false;
         }
-
+    },
+    deleteAllBlogs() {
+        bloggers.splice(0, bloggers.length)
     }
 }
