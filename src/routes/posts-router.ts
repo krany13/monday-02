@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
-import {bloggersRepository} from "../repositories/bloggers-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {body} from "express-validator";
+import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 
 export const postsRouter = Router({})
 
@@ -38,6 +38,7 @@ postsRouter.post('/',
     shortDescriptionValidations,
     contentValidations,
     blogIdValidations,
+    inputValidationsMiddleware,
     (req:Request, res: Response) => {
     const newPost = postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
         req.body.blogId)
@@ -49,11 +50,12 @@ postsRouter.put('/:id',
     shortDescriptionValidations,
     contentValidations,
     blogIdValidations,
+    inputValidationsMiddleware,
     (req:Request, res: Response) => {
     const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
         req.body.content, req.body.blogId)
     if (isUpdated) {
-        const video = bloggersRepository.findBlogById(req.params.id)
+        const video = postsRepository.findPostById(req.params.id)
         return res.status(204).send(video)
     } else {
         return res.sendStatus(404)
