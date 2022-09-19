@@ -1,8 +1,14 @@
 import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {postsRepository} from "../repositories/posts-repository";
+import {body} from "express-validator";
 
 export const postsRouter = Router({})
+
+const titleValidations = body('title').isString().notEmpty().isLength({max: 30})
+const shortDescriptionValidations = body('shortDescription').isString().notEmpty().isLength({max: 100})
+const contentValidations = body('content').isString().notEmpty().isLength({max: 1000})
+const blogIdValidations = body('blogId').isString().notEmpty()
 
 postsRouter.get('/', (req:Request, res: Response) => {
     const findPosts = postsRepository.seePost()
@@ -27,13 +33,23 @@ postsRouter.delete('/:id', (req:Request, res: Response) => {
     }
 })
 
-postsRouter.post('/', (req:Request, res: Response) => {
+postsRouter.post('/',
+    titleValidations,
+    shortDescriptionValidations,
+    contentValidations,
+    blogIdValidations,
+    (req:Request, res: Response) => {
     const newPost = postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
         req.body.blogId)
     return res.status(201).send(newPost)
 })
 
-postsRouter.put('/:id', (req:Request, res: Response) => {
+postsRouter.put('/:id',
+    titleValidations,
+    shortDescriptionValidations,
+    contentValidations,
+    blogIdValidations,
+    (req:Request, res: Response) => {
     const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
         req.body.content, req.body.blogId)
     if (isUpdated) {
