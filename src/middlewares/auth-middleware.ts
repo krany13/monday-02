@@ -1,13 +1,19 @@
 import {NextFunction, Request, Response} from "express";
 
 export const basicAuthorization = (req: Request, res: Response, next: NextFunction) => {
-    const stdAuth = {login: "admin", password: "qwerty"}
+    // const stdAuth = {login: "admin", password: "qwerty"}
+    const stdLogin = "admin"
+    const stdPassword = "qwerty"
+    const stdAuthType = "Basic"
     const auth = req.headers.authorization
     if (!auth) return res.sendStatus(401)
-    const token = auth.split(" ")[1]
+    const splitSting = auth.split(" ")
+    const authType = splitSting[0]
+    if (authType !== stdAuthType) return res.sendStatus(401)
+    const token = splitSting[1]
     const [login, password] = Buffer.from(token, 'base64').toString().split(':')
     const validHeader = `Basic ${login}:${password}`
-    if(login !== stdAuth.login || password !== stdAuth.password) {
+    if(login !== stdLogin || password !== stdPassword ) {
         return res.sendStatus(401)
     } else {
         next()
