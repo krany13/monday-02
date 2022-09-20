@@ -15,7 +15,7 @@ app.use(cors())
 const parserMiddleware = express.json()
 app.use(parserMiddleware)
 
-app.use('/bloggers', bloggersRouter)
+app.use('/blogs', bloggersRouter)
 app.use('/posts', postsRouter)
 app.use('/testing', testingRouter)
 

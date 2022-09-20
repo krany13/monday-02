@@ -34,6 +34,7 @@ bloggersRouter.delete('/:id',
     })
 
 bloggersRouter.post('/',
+    basicAuthorization,
     nameValidations,
     urlValidations,
     inputValidationsMiddleware,
