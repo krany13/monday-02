@@ -6,8 +6,8 @@ import {basicAuthorization} from "../middlewares/auth-middleware";
 
 export const blogsRouter = Router({})
 
-const nameValidations = body('name').isString().notEmpty().isLength({max: 15})
-const urlValidations = body('youtubeUrl').isString().withMessage('1').trim().notEmpty().withMessage('2').isLength({max: 100}).withMessage('3').matches(/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/).withMessage('4')
+const nameValidations = body('name').isString().trim().not().isEmpty().isLength({max: 15})
+const urlValidations = body('youtubeUrl').isString().trim().notEmpty().isLength({max: 100}).matches(/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/)
 
 blogsRouter.get('/', (req: Request, res: Response) => {
     const findBlogs = bloggersRepository.seeBlog()
