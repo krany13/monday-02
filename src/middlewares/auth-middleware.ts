@@ -13,3 +13,20 @@ export const basicAuthorization = (req: Request, res: Response, next: NextFuncti
         next()
     }
 }
+// const auth = require('basic-auth')
+
+// const basicAuthorization = async (req: any, res:any, next: NextFunction) => {
+//     const user = await auth(req)
+//
+//     const username: string = 'admin'
+//     const password: string = 'qwerty'
+//
+//     if(user && user.name.toLowerCase() === username.toLowerCase() && user.pass === password){
+//         next()
+//     } else {
+//         res.status(401)
+//     }
+//
+//
+// }
+// export default basicAuthorization

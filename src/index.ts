@@ -3,6 +3,7 @@ import bodyParser from "body-parser"
 import {bloggersRouter} from "./routes/bloggers-router";
 import {postsRouter} from "./routes/posts-router";
 import {testingRouter} from "./routes/testing-router";
+import {basicAuthorization} from "./middlewares/auth-middleware";
 
 const app = express()
 
@@ -14,7 +15,6 @@ app.use(parserMiddleware)
 app.use('/bloggers', bloggersRouter)
 app.use('/posts', postsRouter)
 app.use('/testing', testingRouter)
-app.use('/testingv2', testingRouter)
 
 app.listen(port, () => {
 })
