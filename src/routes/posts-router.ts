@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {postsRepository} from "../repositories/posts-repository";
 import {body} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
+import {basicAuthorization} from "../middlewares/auth-middleware";
 
 export const postsRouter = Router({})
 
@@ -24,7 +25,9 @@ postsRouter.get('/:id', (req:Request, res: Response) => {
     }
 })
 
-postsRouter.delete('/:id', (req:Request, res: Response) => {
+postsRouter.delete('/:id',
+    basicAuthorization,
+    (req:Request, res: Response) => {
     const isDeleted = postsRepository.deletePostById(req.params.id)
     if (isDeleted) {
         return res.sendStatus(204)
@@ -39,6 +42,7 @@ postsRouter.post('/',
     contentValidations,
     blogIdValidations,
     inputValidationsMiddleware,
+    basicAuthorization,
     (req:Request, res: Response) => {
     const newPost = postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
         req.body.blogId)
@@ -50,6 +54,7 @@ postsRouter.put('/:id',
     shortDescriptionValidations,
     contentValidations,
     blogIdValidations,
+    basicAuthorization,
     inputValidationsMiddleware,
     (req:Request, res: Response) => {
     const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,

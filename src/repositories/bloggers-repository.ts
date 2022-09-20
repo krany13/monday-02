@@ -14,7 +14,6 @@ export const bloggersRepository = {
                 name: name,
                 youtubeUrl,
             }
-        console.log(newBlog, 'newBlog')
         bloggers.push(newBlog)
         return newBlog
     },

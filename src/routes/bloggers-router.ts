@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {body} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
+import {basicAuthorization} from "../middlewares/auth-middleware";
 
 export const bloggersRouter = Router({})
 
@@ -21,7 +22,9 @@ bloggersRouter.get('/:id', (req:Request, res: Response) => {
     }
 })
 
-bloggersRouter.delete('/:id', (req:Request, res: Response) => {
+bloggersRouter.delete('/:id',
+    basicAuthorization,
+    (req:Request, res: Response) => {
     const isDeleted = bloggersRepository.deleteBlogById(req.params.id)
     if (isDeleted) {
         return res.sendStatus(204)
@@ -36,10 +39,11 @@ bloggersRouter.post('/',
     inputValidationsMiddleware,
     (req:Request, res: Response) => {
     const newBlog = bloggersRepository.createBlog(req.body.name, req.body.youtubeUrl)
-    return res.status(201).send(newBlog)
+     res.status(201).send(newBlog)
 })
 
 bloggersRouter.put('/:id',
+    basicAuthorization,
     nameValidations,
     urlValidations,
     inputValidationsMiddleware,
