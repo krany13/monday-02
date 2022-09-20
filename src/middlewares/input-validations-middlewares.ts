@@ -3,23 +3,22 @@ import {validationResult} from "express-validator";
 
 export const inputValidationsMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        let newErrors = errors.array()
-
-
-        res.status(400).json({
-            resultCode:1,
-            errorsMessages: newErrors.map((el) => ({
-                message: el.msg,
-                field: el.param
-            }))
-        })
-    } else {
+    if (errors.isEmpty()) {
         next()
+    } else {
+        const errorsOccurred = errors.array({onlyFirstError: true}).map(e => {
+            return {
+                message: e.msg,
+                field: e.param
+            }
+        })
+        return res.status(400).send(
+            {
+                "errorsMessages": errorsOccurred
+            }
+        )
     }
-
 }
-
 // const errors = validationResult(req);
 // if (!errors.isEmpty()) {
 //     const errorsToJson = JSON.parse(JSON.stringify(errors));
