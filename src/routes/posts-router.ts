@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {postsRepository} from "../repositories/posts-repository";
-import {body} from "express-validator";
+import {body, param} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 import {basicAuthorization} from "../middlewares/auth-middleware";
 
@@ -9,7 +9,9 @@ export const postsRouter = Router({})
 const titleValidations = body('title').isString().notEmpty().isLength({max: 30})
 const shortDescriptionValidations = body('shortDescription').isString().notEmpty().isLength({max: 100})
 const contentValidations = body('content').isString().notEmpty().isLength({max: 1000})
-const blogIdValidations = body('blogId').isString().notEmpty()
+const blogIdValidations = body('blogId').isString().custom(() => {
+
+})
 
 postsRouter.get('/', (req:Request, res: Response) => {
     const findPosts = postsRepository.seePost()
