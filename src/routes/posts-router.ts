@@ -9,8 +9,10 @@ export const postsRouter = Router({})
 const titleValidations = body('title').isString().notEmpty().isLength({max: 30})
 const shortDescriptionValidations = body('shortDescription').isString().notEmpty().isLength({max: 100})
 const contentValidations = body('content').isString().notEmpty().isLength({max: 1000})
-const blogIdValidations = body('blogId').isString().custom(() => {
-
+const blogIdValidations = body('blogId').isString().custom((value) => {
+    const blogger = postsRepository.findPostById(value)
+    if (blogger) return blogger;
+    throw new Error('invalid bloggerId')
 })
 
 postsRouter.get('/', (req:Request, res: Response) => {
@@ -59,6 +61,10 @@ postsRouter.put('/:id',
     basicAuthorization,
     inputValidationsMiddleware,
     (req:Request, res: Response) => {
+    // if(req.body.blogId = ) {
+    //
+    // }
+        res.json({requestBody: req.body})
     const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
         req.body.content, req.body.blogId)
     if (isUpdated) {
