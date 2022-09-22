@@ -9,11 +9,7 @@ export const postsRouter = Router({})
 const titleValidations = body('title').isString().notEmpty().isLength({max: 30})
 const shortDescriptionValidations = body('shortDescription').isString().notEmpty().isLength({max: 100})
 const contentValidations = body('content').isString().notEmpty().isLength({max: 1000})
-const blogIdValidations = body('blogId').isString().custom((value) => {
-    const blogger = postsRepository.findPostById(value)
-    if (blogger) return blogger;
-    throw new Error('invalid bloggerId')
-})
+const blogIdValidations = body('blogId').isString()
 
 postsRouter.get('/', (req:Request, res: Response) => {
     const findPosts = postsRepository.seePost()
