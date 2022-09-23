@@ -64,10 +64,6 @@ postsRouter.put('/:id',
     basicAuthorization,
     inputValidationsMiddleware,
     (req: Request, res: Response) => {
-        // if(req.body.blogId = ) {
-        //
-        // }
-        res.json({requestBody: req.body})
         const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
             req.body.content, req.body.blogId)
         if (isUpdated) {

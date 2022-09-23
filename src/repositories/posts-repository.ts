@@ -44,12 +44,14 @@ export const postsRepository = {
         return posts
     },
     updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string) {
+        const blog = bloggersRepository.findBlogById(blogId)
         let post = posts.find(v => v.id === id)
         if (post) {
             post.title = title,
             post.shortDescription = shortDescription,
             post.content = content,
             post.blogId = blogId
+            post.blogName = blog!.name
             return true;
         } else {
             return false;
