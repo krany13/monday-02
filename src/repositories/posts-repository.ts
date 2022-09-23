@@ -1,3 +1,5 @@
+import {bloggersRepository} from "./bloggers-repository";
+
 const posts: Array<postType> = [{id: "2" ,title: "REST API C#", shortDescription: "hello", content: "privet",
 blogId: "2", blogName: "test"}]
 
@@ -12,6 +14,7 @@ type postType = {
 
 export const postsRepository = {
     createPost(title: string, shortDescription: string, content: string, blogId: string) {
+        const blog = bloggersRepository.findBlogById(blogId)
         const newPost =
             {
                 id: String(posts.length + 1),
@@ -19,7 +22,7 @@ export const postsRepository = {
                 shortDescription: shortDescription,
                 content: content,
                 blogId: blogId,
-                blogName: null
+                blogName: blog!.name
             }
         posts.push(newPost)
         return newPost

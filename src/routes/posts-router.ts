@@ -11,7 +11,9 @@ const titleValidations = body('title').isString().notEmpty().isLength({max: 30})
 const shortDescriptionValidations = body('shortDescription').isString().notEmpty().isLength({max: 100})
 const contentValidations = body('content').isString().notEmpty().isLength({max: 1000})
 const blogIdValidations = body('blogId').isString().trim().notEmpty().custom((value) => {
+    console.log(value)
     const blogger = bloggersRepository.findBlogById(value)
+    console.log(blogger)
     if (blogger) return true
     return false
 })
