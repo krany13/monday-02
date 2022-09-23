@@ -7,13 +7,11 @@ import {bloggersRepository} from "../repositories/bloggers-repository";
 
 export const postsRouter = Router({})
 
-const titleValidations = body('title').isString().notEmpty().isLength({max: 30})
-const shortDescriptionValidations = body('shortDescription').isString().notEmpty().isLength({max: 100})
-const contentValidations = body('content').isString().notEmpty().isLength({max: 1000})
+const titleValidations = body('title').isString().trim().notEmpty().isLength({max: 30})
+const shortDescriptionValidations = body('shortDescription').isString().trim().notEmpty().isLength({max: 100})
+const contentValidations = body('content').isString().trim().notEmpty().isLength({max: 1000})
 const blogIdValidations = body('blogId').isString().trim().notEmpty().custom((value) => {
-    console.log(value)
     const blogger = bloggersRepository.findBlogById(value)
-    console.log(blogger)
     if (blogger) return true
     return false
 })
@@ -44,12 +42,12 @@ postsRouter.delete('/:id',
     })
 
 postsRouter.post('/',
+    basicAuthorization,
     titleValidations,
     shortDescriptionValidations,
     contentValidations,
     blogIdValidations,
     inputValidationsMiddleware,
-    basicAuthorization,
     (req: Request, res: Response) => {
         const newPost = postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
             req.body.blogId)
@@ -57,11 +55,11 @@ postsRouter.post('/',
     })
 
 postsRouter.put('/:id',
+    basicAuthorization,
     titleValidations,
     shortDescriptionValidations,
     contentValidations,
     blogIdValidations,
-    basicAuthorization,
     inputValidationsMiddleware,
     (req: Request, res: Response) => {
         const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
