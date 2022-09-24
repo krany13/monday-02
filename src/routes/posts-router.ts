@@ -16,6 +16,8 @@ const blogIdValidations = body('blogId').isString().trim().notEmpty().custom((va
     return false
 })
 
+
+
 postsRouter.get('/', (req: Request, res: Response) => {
     const findPosts = postsRepository.seePost()
     return res.status(200).send(findPosts)

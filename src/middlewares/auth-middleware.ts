@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 
 export const basicAuthorization = (req: Request, res: Response, next: NextFunction) => {
-    // const stdAuth = {login: "admin", password: "qwerty"}
     const stdLogin = "admin"
     const stdPassword = "qwerty"
     const stdAuthType = "Basic"

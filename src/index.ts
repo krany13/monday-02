@@ -20,4 +20,5 @@ app.use('/posts', postsRouter)
 app.use('/testing', testingRouter)
 
 app.listen(port, () => {
+    console.log(`App started at port: ${port}`)
 })
