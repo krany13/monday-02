@@ -1,18 +1,21 @@
-const bloggers: Array<blogType> = [{id: "1" ,name: "Teddy Smith", youtubeUrl: "chain.com"}]
+const bloggers: Array<blogType> = [{id: "1" ,name: "Teddy Smith", youtubeUrl: "chain.com", createdAt: new Date()}]
 
 type blogType = {
     id: string,
     name: string,
     youtubeUrl: string
+    createdAt: Date
 }
 
 export const bloggersRepository = {
     createBlog(name: string, youtubeUrl: string) {
+        const dateNow: Date = new Date()
         const newBlog =
             {
                 id: String(bloggers.length + 1),
                 name: name,
                 youtubeUrl,
+                createdAt: dateNow
             }
         bloggers.push(newBlog)
         return newBlog
