@@ -14,7 +14,7 @@ type postType = {
 }
 
 export const postsRepository = {
-      async createPost(title: string, shortDescription: string, content: string, blogId: string) {
+      async createPost(title: string, shortDescription: string, content: string, blogId: string) : Promise<postType> {
         const dateNow: Date = new Date()
         const blog = await bloggersRepository.findBlogById(blogId)
         const newPost =
@@ -30,11 +30,11 @@ export const postsRepository = {
         posts.push(newPost)
         return newPost
     },
-    findPostById(id: string) {
+    async findPostById(id: string) : Promise<postType | null> {
         let post = posts.find(v => v.id === id)
-        return post
+        return post!
     },
-    deletePostById(id: string) {
+    async deletePostById(id: string) : Promise<boolean> {
         for (let i = 0; i < posts.length; i++) {
             if (posts[i].id === id) {
                 posts.splice(i, 1)
@@ -43,10 +43,10 @@ export const postsRepository = {
         }
         return false;
     },
-    seePost() {
+    async seePost() : Promise<postType[]> {
         return posts
     },
-    async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string) {
+    async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string) : Promise<boolean> {
         const blog = await bloggersRepository.findBlogById(blogId)
         let post = posts.find(v => v.id === id)
         if (post) {
