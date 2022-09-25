@@ -14,9 +14,9 @@ type postType = {
 }
 
 export const postsRepository = {
-    createPost(title: string, shortDescription: string, content: string, blogId: string) {
+      async createPost(title: string, shortDescription: string, content: string, blogId: string) {
         const dateNow: Date = new Date()
-        const blog = bloggersRepository.findBlogById(blogId)
+        const blog = await bloggersRepository.findBlogById(blogId)
         const newPost =
             {
                 id: String(posts.length + 1),
@@ -46,8 +46,8 @@ export const postsRepository = {
     seePost() {
         return posts
     },
-    updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string) {
-        const blog = bloggersRepository.findBlogById(blogId)
+    async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string) {
+        const blog = await bloggersRepository.findBlogById(blogId)
         let post = posts.find(v => v.id === id)
         if (post) {
             post.title = title,

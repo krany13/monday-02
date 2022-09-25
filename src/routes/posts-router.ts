@@ -10,8 +10,8 @@ export const postsRouter = Router({})
 const titleValidations = body('title').isString().trim().notEmpty().isLength({max: 30})
 const shortDescriptionValidations = body('shortDescription').isString().trim().notEmpty().isLength({max: 100})
 const contentValidations = body('content').isString().trim().notEmpty().isLength({max: 1000})
-const blogIdValidations = body('blogId').isString().trim().notEmpty().custom((value) => {
-    const blogger = bloggersRepository.findBlogById(value)
+const blogIdValidations = body('blogId').isString().trim().notEmpty().custom(async (value) => {
+    const blogger = await bloggersRepository.findBlogById(value)
     if (blogger) return true
     return false
 })
@@ -63,8 +63,8 @@ postsRouter.put('/:id',
     contentValidations,
     blogIdValidations,
     inputValidationsMiddleware,
-    (req: Request, res: Response) => {
-        const isUpdated = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
+    async (req: Request, res: Response) => {
+        const isUpdated = await postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
             req.body.content, req.body.blogId)
         if (isUpdated) {
             const video = postsRepository.findPostById(req.params.id)
