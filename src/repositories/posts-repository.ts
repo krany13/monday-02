@@ -1,7 +1,7 @@
 import {bloggersRepository} from "./bloggers-repository";
 
 const posts: Array<postType> = [{id: "2" ,title: "REST API C#", shortDescription: "hello", content: "privet",
-blogId: "2", blogName: "test"}]
+blogId: "2", blogName: "test", createdAt: new Date()}]
 
 type postType = {
     id: string,
@@ -9,11 +9,13 @@ type postType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string | null
+    blogName: string | null,
+    createdAt: Date
 }
 
 export const postsRepository = {
     createPost(title: string, shortDescription: string, content: string, blogId: string) {
+        const dateNow: Date = new Date()
         const blog = bloggersRepository.findBlogById(blogId)
         const newPost =
             {
@@ -22,7 +24,8 @@ export const postsRepository = {
                 shortDescription: shortDescription,
                 content: content,
                 blogId: blogId,
-                blogName: blog!.name
+                blogName: blog!.name,
+                createdAt: dateNow
             }
         posts.push(newPost)
         return newPost

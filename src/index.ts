@@ -5,6 +5,7 @@ import {postsRouter} from "./routes/posts-router";
 import {testingRouter} from "./routes/testing-router";
 import {basicAuthorization} from "./middlewares/auth-middleware";
 import cors from "cors";
+import {runDb} from "./repositories/db";
 
 const app = express()
 
@@ -19,6 +20,11 @@ app.use('/blogs', blogsRouter)
 app.use('/posts', postsRouter)
 app.use('/testing', testingRouter)
 
-app.listen(port, () => {
-    console.log(`App started at port: ${port}`)
-})
+const  startApp = async () => {
+  await runDb()
+    app.listen(port, () => {
+        console.log(`App started at port: ${port}`)
+    })
+}
+
+startApp()
