@@ -5,8 +5,8 @@ import {bloggersRepository} from "../repositories/bloggers-repository";
 export const testingRouter = Router({})
 
 
-testingRouter.delete('/all-data', (req: Request, res:Response) => {
-    const isAllDelete = postsRepository.deleteAllPosts()
-    const isAllDeleted = bloggersRepository.deleteAllBlogs()
-    res.sendStatus(204)
+testingRouter.delete('/all-data', async (req: Request, res:Response) => {
+    postsRepository.deleteAllPosts()
+    await bloggersRepository.deleteAllBlogs()
+    return res.sendStatus(204)
 })
