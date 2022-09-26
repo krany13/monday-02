@@ -19,7 +19,7 @@ const blogIdValidations = body('blogId').isString().trim().notEmpty().custom(asy
 
 
 postsRouter.get('/', (req: Request, res: Response) => {
-    const findPosts = postsRepository.seePost()
+    const findPosts = postsRepository.getAllPosts()
     return res.status(200).send(findPosts)
 })
 
