@@ -24,7 +24,7 @@ export const bloggersRepository = {
         return newBlog
     },
     async findBlogById(id: string): Promise<BlogType | null> {
-        let blogger: BlogType | null = await blogsCollection.findOne({id: id})
+        let blogger: BlogType | null = await blogsCollection.findOne({id: id}, {projection: {_id: false}})
         return blogger
     },
     async deleteBlogById(id: string): Promise<boolean> {
@@ -32,7 +32,7 @@ export const bloggersRepository = {
         return result.deletedCount === 1
     },
     async seeBlog(): Promise<BlogType[]> {
-        return blogsCollection.find({}).toArray()
+        return blogsCollection.find({}, {projection: {_id: false}}).toArray()
     },
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
         const result = await client.db("videos").collection<BlogType>("blogs").updateOne({id: id},
