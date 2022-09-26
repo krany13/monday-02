@@ -1,6 +1,8 @@
-const bloggers: Array<blogType> = [{id: "1" ,name: "Teddy Smith", youtubeUrl: "chain.com", createdAt: new Date()}]
+import {blogsCollection, client} from "./db";
 
-type blogType = {
+// const __bloggers: Array<BlogType> = [{id: "1", name: "Teddy Smith", youtubeUrl: "chain.com", createdAt: new Date()}]
+
+export type BlogType = {
     id: string,
     name: string,
     youtubeUrl: string
@@ -8,45 +10,46 @@ type blogType = {
 }
 
 export const bloggersRepository = {
-    async createBlog(name: string, youtubeUrl: string) : Promise<blogType>{
+    async createBlog(name: string, youtubeUrl: string): Promise<BlogType> {
         const dateNow: Date = new Date()
         const newBlog =
             {
-                id: String(bloggers.length + 1),
+                id: String(+dateNow),
                 name: name,
                 youtubeUrl,
                 createdAt: dateNow
             }
-        bloggers.push(newBlog)
+        await blogsCollection.insertOne(newBlog)
+        // __bloggers.push(newBlog)
         return newBlog
     },
-    async findBlogById(id: string): Promise<blogType | null>{
-        let blogger = bloggers.find(v => v.id === id)
-        return blogger!
+    async findBlogById(id: string): Promise<BlogType | null> {
+        let blogger: BlogType | null = await blogsCollection.findOne({id: id})
+        return blogger
     },
-    async deleteBlogById(id: string) : Promise<boolean>{
-        for (let i = 0; i < bloggers.length; i++) {
-            if (bloggers[i].id === id) {
-                bloggers.splice(i, 1)
-                return true;
-            }
-        }
-        return false;
+    async deleteBlogById(id: string): Promise<boolean> {
+        const result = await blogsCollection.deleteOne({id: id})
+        return result.deletedCount === 1
     },
-    async seeBlog() : Promise<blogType[]>{
-        return bloggers
+    async seeBlog(): Promise<BlogType[]> {
+        return blogsCollection.find({}).toArray()
     },
-    async updateBlog(id: string, name: string, youtubeUrl: string) : Promise<boolean>{
-        let blogger = bloggers.find(v => v.id === id)
-        if (blogger) {
-            blogger.name = name,
-                blogger.youtubeUrl = youtubeUrl
-            return true;
-        } else {
-            return false;
-        }
+    async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
+        const result = await client.db("videos").collection<BlogType>("blogs").updateOne({id: id},
+            {$set: {name: name, youtubeUrl: youtubeUrl}})
+        return result.matchedCount === 1
+        //
+        // let blogger = __bloggers.find(v => v.id === id)
+        // if (blogger) {
+        //     blogger.name = name,
+        //     blogger.youtubeUrl = youtubeUrl
+        //     return true;
+        // } else {
+        //     return false;
+        // }
     },
-    deleteAllBlogs() {
-        bloggers.splice(0, bloggers.length)
+    async deleteAllBlogs() {
+        // __bloggers.splice(0, __bloggers.length)
+        await blogsCollection.deleteMany({})
     }
 }
