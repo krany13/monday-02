@@ -1,6 +1,6 @@
 import {MongoClient} from "mongodb";
 import {settings} from "../settings";
-import {BlogType} from "./bloggers-repository";
+import {BlogType} from "./bloggers-db-repository";
 
 
 const mongoURI = settings.mongoURI

@@ -1,16 +1,11 @@
+import {BlogType} from "./bloggers-db-repository";
 
 
-const bloggers: Array<blogType> = [{id: "1" ,name: "Teddy Smith", youtubeUrl: "chain.com", createdAt: new Date()}]
+const bloggers: Array<BlogType> = [{id: "1" ,name: "Teddy Smith", youtubeUrl: "chain.com", createdAt: new Date()}]
 
-type blogType = {
-    id: string,
-    name: string,
-    youtubeUrl: string
-    createdAt: Date
-}
 
 export const bloggersRepository = {
-    async createBlog(name: string, youtubeUrl: string) : Promise<blogType>{
+    async createBlog(name: string, youtubeUrl: string) : Promise<BlogType>{
         const dateNow: Date = new Date()
         const newBlog =
             {
@@ -22,7 +17,7 @@ export const bloggersRepository = {
         bloggers.push(newBlog)
         return newBlog
     },
-    async findBlogById(id: string): Promise<blogType | null>{
+    async findBlogById(id: string): Promise<BlogType | null>{
         let blogger = bloggers.find(v => v.id === id)
         return blogger!
     },
@@ -35,7 +30,7 @@ export const bloggersRepository = {
         }
         return false;
     },
-    async seeBlog() : Promise<blogType[]>{
+    async seeBlog() : Promise<BlogType[]>{
         return bloggers
     },
     async updateBlog(id: string, name: string, youtubeUrl: string) : Promise<boolean>{
