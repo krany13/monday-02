@@ -25,7 +25,7 @@ export const bloggersRepository = {
     },
     async findBlogById(id: string): Promise<BlogType | null>{
         let blogger: BlogType | null = await blogsCollection.findOne({id: id})
-        return blogger!
+        return blogger
     },
     async deleteBlogById(id: string) : Promise<boolean>{
         const result = await blogsCollection.deleteOne({id: id})

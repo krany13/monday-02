@@ -11,14 +11,15 @@ type postType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string | null,
+    blogName: string,
     createdAt: Date
 }
 
 export const postsRepository = {
-    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<postType> {
+    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<postType | null> {
         const dateNow: Date = new Date()
         const blog = await bloggersRepository.findBlogById(blogId)
+        if (!blog) return null
         const newPost =
             {
                 id: String(posts.length + 1),
@@ -26,7 +27,7 @@ export const postsRepository = {
                 shortDescription: shortDescription,
                 content: content,
                 blogId: blogId,
-                blogName: blog!.name,
+                blogName: blog.name,
                 createdAt: dateNow
             }
         posts.push(newPost)
@@ -48,19 +49,28 @@ export const postsRepository = {
     getAllPosts(): postType[] {
         return posts
     },
-    async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
+    async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean | null> {
         const blog = await bloggersRepository.findBlogById(blogId)
+        if (!blog) return null
         let post = posts.find(v => v.id === id)
-        if (post) {
-            post.title = title,
-                post.shortDescription = shortDescription,
-                post.content = content,
-                post.blogId = blogId
-            post.blogName = blog!.name
-            return true;
-        } else {
-            return false;
-        }
+        // if (post) {
+        //     post.title = title,
+        //         post.shortDescription = shortDescription,
+        //         post.content = content,
+        //         post.blogId = blogId
+        //     post.blogName = blog.name
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+        if (!post) return false
+        post.title = title,
+            post.shortDescription = shortDescription,
+            post.content = content,
+            post.blogId = blogId
+        post.blogName = blog.name
+        return true;
+
     },
     deleteAllPosts() {
         posts.splice(0, posts.length)
