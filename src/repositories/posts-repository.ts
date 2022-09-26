@@ -1,4 +1,4 @@
-import {bloggersRepository} from "./bloggers-repository";
+import {bloggersRepository} from "./bloggers-db-repository";
 
 const posts: Array<postType> = [{
     id: "2", title: "REST API C#", shortDescription: "hello", content: "privet",
