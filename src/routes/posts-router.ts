@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {postsRepository} from "../repositories/posts-repository";
-import {body, param} from "express-validator";
+import {body} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 import {basicAuthorization} from "../middlewares/auth-middleware";
 import {bloggersRepository} from "../repositories/bloggers-db-repository";
@@ -12,8 +12,7 @@ const shortDescriptionValidations = body('shortDescription').isString().trim().n
 const contentValidations = body('content').isString().trim().notEmpty().isLength({max: 1000})
 const blogIdValidations = body('blogId').isString().trim().notEmpty().custom(async (value) => {
     const blogger = await bloggersRepository.findBlogById(value)
-    if (blogger) return true
-    return false
+    if (!blogger) throw new Error()
 })
 
 
@@ -50,8 +49,8 @@ postsRouter.post('/',
     contentValidations,
     blogIdValidations,
     inputValidationsMiddleware,
-    (req: Request, res: Response) => {
-        const newPost = postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
+    async (req: Request, res: Response) => {
+        const newPost = await postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
             req.body.blogId)
         return res.status(201).send(newPost)
     })

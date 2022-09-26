@@ -1,6 +1,5 @@
 import {blogsCollection, client} from "./db";
 
-// const __bloggers: Array<BlogType> = [{id: "1", name: "Teddy Smith", youtubeUrl: "chain.com", createdAt: new Date()}]
 
 export type BlogType = {
     id: string,
