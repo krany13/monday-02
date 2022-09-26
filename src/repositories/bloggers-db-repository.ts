@@ -19,8 +19,7 @@ export const bloggersRepository = {
                 youtubeUrl,
                 createdAt: dateNow
             }
-        await blogsCollection.insertOne(newBlog)
-        // __bloggers.push(newBlog)
+        await blogsCollection.insertOne({...newBlog})
         return newBlog
     },
     async findBlogById(id: string): Promise<BlogType | null> {
