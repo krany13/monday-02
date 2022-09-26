@@ -30,7 +30,7 @@ export const bloggersRepository = {
         }
         return false;
     },
-    async seeBlog() : Promise<BlogType[]>{
+    async getAllBlogs() : Promise<BlogType[]>{
         return bloggers
     },
     async updateBlog(id: string, name: string, youtubeUrl: string) : Promise<boolean>{

@@ -31,7 +31,7 @@ export const bloggersRepository = {
         const result = await blogsCollection.deleteOne({id: id})
         return result.deletedCount === 1
     },
-    async seeBlog(): Promise<BlogType[]> {
+    async getAllBlogs(): Promise<BlogType[]> {
         return blogsCollection.find({}, {projection: {_id: false}}).toArray()
     },
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
