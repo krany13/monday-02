@@ -1,15 +1,16 @@
-import express, {Request, Response} from "express"
-import bodyParser from "body-parser"
+import * as dotenv from 'dotenv'
+dotenv.config()
+import express from "express"
 import {blogsRouter} from "./routes/blogs-router";
 import {postsRouter} from "./routes/posts-router";
 import {testingRouter} from "./routes/testing-router";
-import {basicAuthorization} from "./middlewares/auth-middleware";
 import cors from "cors";
 import {runDb} from "./repositories/db";
+import {settings} from "./settings";
 
 const app = express()
 
-const port =  process.env.PORT || 5000
+const port = settings.port
 
 app.use(cors())
 // const parserMiddleware = bodyParser()
@@ -20,8 +21,8 @@ app.use('/blogs', blogsRouter)
 app.use('/posts', postsRouter)
 app.use('/testing', testingRouter)
 
-const  startApp = async () => {
-  await runDb()
+const startApp = async () => {
+    await runDb()
     app.listen(port, () => {
         console.log(`App started at port: ${port}`)
     })
