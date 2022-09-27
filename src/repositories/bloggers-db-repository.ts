@@ -46,6 +46,7 @@ export const bloggersRepository = {
         //     return false;
         // }
     },
+
     async deleteAllBlogs() {
         // __bloggers.splice(0, __bloggers.length)
         await blogsCollection.deleteMany({})
