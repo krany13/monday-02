@@ -1,22 +1,23 @@
 import {bloggersRepository} from "./bloggers-db-repository";
+import {PostType} from "./posts-db-repository";
 
-const posts: Array<postType> = [{
+const posts: Array<PostType> = [{
     id: "2", title: "REST API C#", shortDescription: "hello", content: "privet",
     blogId: "2", blogName: "test", createdAt: new Date()
 }]
 
-type postType = {
-    id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: Date
-}
+// type PostType = {
+//     id: string,
+//     title: string,
+//     shortDescription: string,
+//     content: string,
+//     blogId: string,
+//     blogName: string,
+//     createdAt: Date
+// }
 
 export const postsRepository = {
-    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<postType | null> {
+    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<PostType| null> {
         const dateNow: Date = new Date()
         const blog = await bloggersRepository.findBlogById(blogId)
         if (!blog) return null
@@ -33,7 +34,7 @@ export const postsRepository = {
         posts.push(newPost)
         return newPost
     },
-    findPostById(id: string): postType | null {
+    findPostById(id: string): PostType | null {
         let post = posts.find(v => v.id === id)
         return post ? post : null
     },
@@ -46,7 +47,7 @@ export const postsRepository = {
         }
         return false;
     },
-    getAllPosts(): postType[] {
+    getAllPosts(): PostType[] {
         return posts
     },
     async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean | null> {
