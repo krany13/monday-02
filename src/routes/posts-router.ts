@@ -1,5 +1,6 @@
 import {Request, Response, Router} from "express";
 import {postsRepository} from "../repositories/posts-repository";
+import {postsService} from "../domain/posts-service";
 import {body} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 import {basicAuthorization} from "../middlewares/auth-middleware";
@@ -18,12 +19,12 @@ const blogIdValidations = body('blogId').isString().trim().notEmpty().custom(asy
 
 
 postsRouter.get('/', (req: Request, res: Response) => {
-    const findPosts = postsRepository.getAllPosts()
+    const findPosts = postsService.getAllPosts()
     return res.status(200).send(findPosts)
 })
 
 postsRouter.get('/:id', (req: Request, res: Response) => {
-    let post = postsRepository.findPostById(req.params.id)
+    let post = postsService.findPostById(req.params.id)
     if (post) {
         return res.send(post)
     } else {
@@ -33,8 +34,8 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
 
 postsRouter.delete('/:id',
     basicAuthorization,
-    (req: Request, res: Response) => {
-        const isDeleted = postsRepository.deletePostById(req.params.id)
+    async (req: Request, res: Response) => {
+        const isDeleted = await postsService.deletePostById(req.params.id)
         if (isDeleted) {
             return res.sendStatus(204)
         } else {
@@ -50,7 +51,7 @@ postsRouter.post('/',
     blogIdValidations,
     inputValidationsMiddleware,
     async (req: Request, res: Response) => {
-        const newPost = await postsRepository.createPost(req.body.title, req.body.shortDescription, req.body.content,
+        const newPost = await postsService.createPost(req.body.title, req.body.shortDescription, req.body.content,
             req.body.blogId)
         return res.status(201).send(newPost)
     })
@@ -63,7 +64,7 @@ postsRouter.put('/:id',
     blogIdValidations,
     inputValidationsMiddleware,
     async (req: Request, res: Response) => {
-        const isUpdated = await postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription,
+        const isUpdated = await postsService.updatePost(req.params.id, req.body.title, req.body.shortDescription,
             req.body.content, req.body.blogId)
         if (isUpdated) {
             const video = postsRepository.findPostById(req.params.id)

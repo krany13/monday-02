@@ -9,15 +9,15 @@ export type BlogType = {
 }
 
 export const bloggersRepository = {
-    async createBlog(name: string, youtubeUrl: string): Promise<BlogType> {
-        const dateNow: Date = new Date()
-        const newBlog =
-            {
-                id: String(+dateNow),
-                name: name,
-                youtubeUrl,
-                createdAt: dateNow
-            }
+    async createBlog(newBlog: BlogType): Promise<BlogType> {
+        // const dateNow: Date = new Date()
+        // const newBlog =
+        //     {
+        //         id: String(+dateNow),
+        //         name: name,
+        //         youtubeUrl,
+        //         createdAt: dateNow
+        //     }
         await blogsCollection.insertOne({...newBlog})
         return newBlog
     },

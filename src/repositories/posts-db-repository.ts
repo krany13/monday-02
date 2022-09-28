@@ -17,20 +17,20 @@ export type PostType = {
 }
 
 export const postsRepository = {
-    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<PostType | null> {
-        const dateNow: Date = new Date()
-        const blog = await bloggersRepository.findBlogById(blogId)
-        if (!blog) return null
-        const newPost =
-            {
-                id: String(+dateNow),
-                title: title,
-                shortDescription: shortDescription,
-                content: content,
-                blogId: blogId,
-                blogName: blog.name,
-                createdAt: dateNow
-            }
+    async createPost(newPost: PostType): Promise<PostType | null> {
+        // const dateNow: Date = new Date()
+        // const blog = await bloggersRepository.findBlogById(blogId)
+        // if (!blog) return null
+        // const newPost =
+        //     {
+        //         id: String(+dateNow),
+        //         title: title,
+        //         shortDescription: shortDescription,
+        //         content: content,
+        //         blogId: blogId,
+        //         blogName: blog.name,
+        //         createdAt: dateNow
+        //     }
         await postsCollection.insertOne({...newPost})
         // posts.push(newPost)
         return newPost
