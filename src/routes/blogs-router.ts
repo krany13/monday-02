@@ -10,6 +10,7 @@ const nameValidations = body('name').isString().trim().not().isEmpty().isLength(
 const urlValidations = body('youtubeUrl').isString().trim().notEmpty().isLength({max: 100}).matches(/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/)
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
+    // const page = req.query.page
     const findBlogs = await bloggersService.getAllBlogs()
     return res.status(200).send(findBlogs)
 })

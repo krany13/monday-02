@@ -16,6 +16,7 @@ export type PostType = {
     createdAt: Date
 }
 
+
 export const postsRepository = {
     async createPost(newPost: PostType): Promise<PostType | null> {
         // const dateNow: Date = new Date()
