@@ -3,6 +3,8 @@ import {bloggersService} from "../domain/bloggers-service";
 import {body} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 import {basicAuthorization} from "../middlewares/auth-middleware";
+import {blogsCollection} from "../repositories/db";
+import {PaginationType} from "../middlewares/pagination-middleware";
 
 export const blogsRouter = Router({})
 
@@ -10,7 +12,23 @@ const nameValidations = body('name').isString().trim().not().isEmpty().isLength(
 const urlValidations = body('youtubeUrl').isString().trim().notEmpty().isLength({max: 100}).matches(/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/)
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const page = req.query.page
+    //pagination
+    const page: PaginationType  = req.query.p || 1
+    // const page = 3
+    const blogsPerAge = 10
+    blogsCollection
+        .find({"name": {"$regex": blogsRouter.name, $options: "va"}})
+        // .find( { $name: { $search: "\"va\"" } } )
+        .sort({"createAt": -1})
+        .skip(page * blogsPerAge)
+        .limit(blogsPerAge)
+        .forEach(blog => blogs.push(blog))
+        .then(()=>{
+            res.send(page)
+        })
+        .catch(()=>{
+            res.sendStatus(500)
+        })
     const findBlogs = await bloggersService.getAllBlogs()
     return res.status(200).send(findBlogs)
 })

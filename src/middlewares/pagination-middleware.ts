@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {PostType} from "../repositories/posts-db-repository";
 import {bloggersService} from "../domain/bloggers-service";
 
-type PaginationItemsType = BlogType[] | PostType[]
+export type PaginationItemsType = BlogType[] | PostType[]
 
 
 // const page = parseInt(req.query.page)
@@ -57,4 +57,8 @@ export type BlogType = {
     name: string,
     youtubeUrl: string,
     createdAt: Date
+}
+
+export type PageType = {
+
 }
