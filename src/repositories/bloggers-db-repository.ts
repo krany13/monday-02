@@ -1,4 +1,6 @@
 import {blogsCollection, client} from "./db";
+import {SortDirection} from "mongodb";
+import {PaginationQueryType, PaginationType} from "../types/pagination-types";
 
 
 export type BlogType = {
@@ -10,14 +12,6 @@ export type BlogType = {
 
 export const bloggersRepository = {
     async createBlog(newBlog: BlogType): Promise<BlogType> {
-        // const dateNow: Date = new Date()
-        // const newBlog =
-        //     {
-        //         id: String(+dateNow),
-        //         name: name,
-        //         youtubeUrl,
-        //         createdAt: dateNow
-        //     }
         await blogsCollection.insertOne({...newBlog})
         return newBlog
     },
@@ -29,22 +23,27 @@ export const bloggersRepository = {
         const result = await blogsCollection.deleteOne({id: id})
         return result.deletedCount === 1
     },
-    async getAllBlogs(): Promise<BlogType[]> {
-        return blogsCollection.find({}, {projection: {_id: false}}).toArray()
+    async getAllBlogs(paginationData: PaginationQueryType): Promise<PaginationType<BlogType[]>> {
+        const page = paginationData.pageNumber
+        const pageSize = paginationData.pageSize
+        const totalCount = await blogsCollection.countDocuments()
+        const pagesCount = Math.ceil(totalCount / pageSize)
+        const searchTerm = paginationData.searchNameTerm ? paginationData.searchNameTerm : "";
+        const sortDirection: SortDirection = paginationData.sortDirection
+        const sortBy = paginationData.sortBy
+        const blogs: BlogType[] = await
+        blogsCollection
+            .find({"name": {$regex: searchTerm}}, {projection: {_id: 0}})
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .sort(sortBy, sortDirection)
+            .toArray()
+        return {pagesCount, pageSize, totalCount, page, items: blogs}
     },
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
         const result = await client.db("videos").collection<BlogType>("blogs").updateOne({id: id},
             {$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
-        //
-        // let blogger = __bloggers.find(v => v.id === id)
-        // if (blogger) {
-        //     blogger.name = name,
-        //     blogger.youtubeUrl = youtubeUrl
-        //     return true;
-        // } else {
-        //     return false;
-        // }
     },
 
     async deleteAllBlogs() {

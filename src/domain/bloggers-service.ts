@@ -1,4 +1,5 @@
 import {bloggersRepository, BlogType} from "../repositories/bloggers-db-repository";
+import {PaginationQueryType} from "../types/pagination-types";
 
 
 export const bloggersService = {
@@ -22,8 +23,8 @@ export const bloggersService = {
         // const result = await blogsCollection.deleteOne({id: id})
         // return result.deletedCount === 1
     },
-    async getAllBlogs(): Promise<BlogType[]> {
-        return bloggersRepository.getAllBlogs()
+    async getAllBlogs(queryData: PaginationQueryType): Promise<BlogType[]> {
+        return bloggersRepository.getAllBlogs(queryData)
     },
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
         return await bloggersRepository.updateBlog(id, name, youtubeUrl)
