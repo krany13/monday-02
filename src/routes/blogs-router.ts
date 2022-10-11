@@ -4,6 +4,7 @@ import {body, query } from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 import {basicAuthorization} from "../middlewares/auth-middleware";
 import {getPaginationData} from "../common/pagination";
+import {postsService} from "../domain/posts-service";
 
 export const blogsRouter = Router({})
 
@@ -15,6 +16,14 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
     const queryData = getPaginationData(req.query);
     const findBlogs = await bloggersService.getAllBlogs(queryData)
     return res.status(200).send(findBlogs)
+})
+
+blogsRouter.get('/:id/posts', async (req: Request, res: Response) => {
+    const queryData = getPaginationData(req.query);
+    const blog = await bloggersService.findBlogById(req.params.id)
+    if (!blog) return res.sendStatus(404)
+    const postsByBLogId = await postsService.getPostsByBlogId(queryData, blog.id)
+    return res.send(postsByBLogId)
 })
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {

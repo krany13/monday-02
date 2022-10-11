@@ -1,5 +1,6 @@
 import {bloggersRepository, BlogType} from "../repositories/bloggers-db-repository";
 import {postsRepository, PostType} from "../repositories/posts-db-repository";
+import {PaginationQueryType, PaginationType} from "../types/pagination-types";
 // const posts: Array<PostType> = [{
 //     id: "2", title: "REST API C#", shortDescription: "hello", content: "privet",
 //     blogId: "2", blogName: "test", createdAt: new Date()
@@ -48,9 +49,12 @@ export const postsService = {
         // }
         // return false;
     },
-    async getAllPosts(): Promise<PostType[]>{
-        return postsRepository.getAllPosts()
+    async getAllPosts(queryData: PaginationQueryType): Promise<PaginationType<PostType[]>>{
+        return await postsRepository.getAllPosts(queryData)
         // return posts
+    },
+    async getPostsByBlogId(queryData: PaginationQueryType, blogId: string): Promise<PaginationType<PostType[]>>{
+        return postsRepository.getPostsByBlogId(queryData, blogId)
     },
     async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean | null> {
         return await postsRepository.updatePost(id, title, shortDescription, content, blogId)

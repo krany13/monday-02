@@ -5,6 +5,7 @@ import {body} from "express-validator";
 import {inputValidationsMiddleware} from "../middlewares/input-validations-middlewares";
 import {basicAuthorization} from "../middlewares/auth-middleware";
 import {bloggersRepository} from "../repositories/bloggers-db-repository";
+import {getPaginationData} from "../common/pagination";
 
 export const postsRouter = Router({})
 
@@ -18,8 +19,9 @@ const blogIdValidations = body('blogId').isString().trim().notEmpty().custom(asy
 
 
 
-postsRouter.get('/', (req: Request, res: Response) => {
-    const findPosts = postsService.getAllPosts()
+postsRouter.get('/',  async (req: Request, res: Response) => {
+    const queryData = getPaginationData(req.query);
+    const findPosts = await postsService.getAllPosts(queryData)
     return res.status(200).send(findPosts)
 })
 

@@ -11,7 +11,7 @@ export type PaginationType<T> = {
 }
 
 export type PaginationQueryType = {
-    searchNameTerm: string | null;
+    searchNameTerm?: string | null;
     pageNumber: number;
     pageSize: number;
     sortBy: string;

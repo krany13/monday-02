@@ -28,16 +28,16 @@ export const bloggersRepository = {
         const pageSize = paginationData.pageSize
         const totalCount = await blogsCollection.countDocuments()
         const pagesCount = Math.ceil(totalCount / pageSize)
-        const searchTerm = paginationData.searchNameTerm ? paginationData.searchNameTerm : "";
+        const searchTerm = paginationData.searchNameTerm ? {name: {$regex: paginationData.searchNameTerm}} : {};
         const sortDirection: SortDirection = paginationData.sortDirection
         const sortBy = paginationData.sortBy
         const blogs: BlogType[] = await
-        blogsCollection
-            .find({"name": {$regex: searchTerm}}, {projection: {_id: 0}})
-            .skip((page - 1) * pageSize)
-            .limit(pageSize)
-            .sort(sortBy, sortDirection)
-            .toArray()
+            blogsCollection
+                .find(searchTerm, {projection: {_id: 0}})
+                .skip((page - 1) * pageSize)
+                .limit(pageSize)
+                .sort(sortBy, sortDirection)
+                .toArray()
         return {pagesCount, pageSize, totalCount, page, items: blogs}
     },
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
